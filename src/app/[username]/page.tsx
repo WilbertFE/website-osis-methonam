@@ -12,7 +12,7 @@ export default async function UserPage({
   const user = await getUserByUsername(username);
 
   // if 404
-  if (!user && user !== undefined)
+  if (user && user.length === 0)
     return (
       <div className="mt-16">
         <h1>User not found 404</h1>
@@ -25,5 +25,5 @@ export default async function UserPage({
       </div>
     );
 
-  return <>{user && <LayoutWrapper user={user} />}</>;
+  return <>{user && user.length > 0 && <LayoutWrapper user={user[0]} />}</>;
 }

@@ -7,6 +7,7 @@ import {
 } from "next/server";
 
 const authPage = ["/login"];
+const onlyAdminPage = ["/admin/journals"];
 
 export default function withAuth(
   middleware: NextMiddleware,
@@ -18,14 +19,20 @@ export default function withAuth(
     if (requireAuth.includes(pathname)) {
       const token = await getToken({ req, secret: process.env.AUTH_SECRET });
 
-      if (!token && !authPage.includes(pathname)) {
-        const url = new URL("/login", req.url);
-        return NextResponse.redirect(url);
+      // if not login
+      if (!token) {
+        if (!authPage.includes(pathname)) {
+          const url = new URL("/login", req.url);
+          return NextResponse.redirect(url);
+        }
       }
 
+      // if login
       if (token) {
         if (authPage.includes(pathname)) {
           return NextResponse.redirect(new URL(`/${token.username}`, req.url));
+        }
+        if (onlyAdminPage.includes(pathname)) {
         }
       }
     }
