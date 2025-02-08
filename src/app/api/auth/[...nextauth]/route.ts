@@ -49,6 +49,7 @@ const authOptions: AuthOptions = {
             userData,
             (result: { status: boolean; data: any }) => {
               if (result.status) {
+                console.log("result: ", result.data);
                 token.email = result.data.email;
                 token.role = result.data.role;
                 token.type = result.data.type;

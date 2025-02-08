@@ -3,7 +3,7 @@
 import { User } from "@/types/User";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-export default function Hero({ user }: { user: User | null | undefined }) {
+export default function Hero({ user }: { user: User }) {
   return (
     <div className="w-full flex mt-4 flex-col px-4 items-center">
       <Avatar className="w-16 h-16">

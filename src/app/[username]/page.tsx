@@ -1,6 +1,6 @@
-import { Hero, Info, Settings } from "./components";
 import { getUserByUsername } from "@/lib/firebase/service";
 import Link from "next/link";
+import LayoutWrapper from "./LayoutWrapper";
 
 export default async function UserPage({
   params,
@@ -25,15 +25,5 @@ export default async function UserPage({
       </div>
     );
 
-  return (
-    <>
-      {user && (
-        <>
-          <Hero user={user} />
-          <Info user={user} />
-          <Settings user={user} />
-        </>
-      )}
-    </>
-  );
+  return <>{user && <LayoutWrapper user={user} />}</>;
 }

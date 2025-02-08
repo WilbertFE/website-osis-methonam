@@ -18,6 +18,8 @@ const db = getFirestore(app);
 export async function loginWithGoogle(data: any, callback: any) {
   const user = await getUserByEmail(data.email);
 
+  console.log("user:", user);
+
   // if login
   if (user) {
     await updateDoc(doc(db, "users", user.id), data).then(() => {
@@ -58,9 +60,7 @@ export async function getUserByUsername(username: string) {
     return null;
   }
 
-  if (user.length > 0) {
-    return user[0];
-  }
+  return user[0];
 }
 
 export async function getUserByEmail(email: string) {
@@ -74,11 +74,7 @@ export async function getUserByEmail(email: string) {
 
   if (user.length === 0) return null;
 
-  const userData = user[0];
-
-  delete userData.role;
-
-  return userData;
+  return user[0];
 }
 
 export async function updateUser(
