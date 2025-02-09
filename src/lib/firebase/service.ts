@@ -65,10 +65,10 @@ export async function loginWithGoogle(
         callback({
           status: true,
           data: {
-            email: data.email,
+            email: user[0].email,
             username: user[0].username,
             image: data.image,
-            fullname: data.name,
+            fullname: user[0].fullname,
             role: user[0].role,
           },
         });
@@ -108,41 +108,31 @@ export async function getUserByEmail(email: string) {
   return user;
 }
 
-// export async function updateUser(
-//   data: {
-//     fullname: string;
-//     username: string;
-//     bio: string;
-//   },
-//   oldUsername: string
-// ) {
-//   const q = query(
-//     collection(db, "users"),
-//     where("username", "==", oldUsername)
-//   );
-//   const snapshot = await getDocs(q);
+export async function updateUser(
+  data: {
+    fullname: string;
+    username: string;
+    bio: string;
+  },
+  oldUsername: string
+) {
+  const user = await getUserByUsername(oldUsername);
 
-//   const user = snapshot.docs.map((doc) => ({
-//     id: doc.id,
-//     ...doc.data(),
-//   })) as User[] | [];
+  if (!user) return { statusCode: 404, message: "User not found!" };
 
-//   // if user not exists
-//   if (user.length === 0)
-//     return { statusCode: 404, message: "User not found", newUsername: null };
+  // if user not exists
+  if (user.length === 0) return { statusCode: 404, message: "User not found!" };
 
-//   // if success
-//   const ref = doc(collection(db, "users"), user[0].id);
+  // if success
+  const ref = doc(collection(db, "users"), user[0].id);
 
-//   return await updateDoc(ref, data)
-//     .then(() => ({
-//       statusCode: 200,
-//       message: "User data updated sucessfully",
-//       newUsername: data.username,
-//     }))
-//     .catch(() => ({
-//       statusCode: 500,
-//       message: "Server error",
-//       newUsername: null,
-//     }));
-// }
+  return await updateDoc(ref, data)
+    .then(() => ({
+      statusCode: 200,
+      message: "User data updated sucessfully!",
+    }))
+    .catch(() => ({
+      statusCode: 500,
+      message: "Server error!",
+    }));
+}

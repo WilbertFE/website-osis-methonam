@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { User } from "@/types/User";
 import { Loader2, MoveRight, SquareUserRound } from "lucide-react";
@@ -14,15 +15,38 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-// import { useState } from "react";
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { useSession } from "next-auth/react";
+
+type response = {
+  statusCode: number;
+  message: string;
+};
 
 export default function Info({ user }: { user: User }) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const router = useRouter();
   const [isDisabled, setIsDisabled] = useState(false);
+  const { data: session, update }: any = useSession();
+
+  const updateSession = async ({
+    username,
+    fullname,
+  }: {
+    username: string;
+    fullname: string;
+  }) => {
+    await update({
+      ...session,
+      user: {
+        ...session?.user,
+        username,
+        fullname,
+      },
+    });
+  };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -34,7 +58,7 @@ export default function Info({ user }: { user: User }) {
     const bio = data.get("bio");
 
     try {
-      const res = await fetch("/api/users", {
+      const res: response = await fetch("/api/users", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -46,17 +70,25 @@ export default function Info({ user }: { user: User }) {
           oldUsername: user.username,
         }),
       }).then((res) => res.json());
-
       if (res.statusCode === 200) {
-        if (res.newUsername !== user.username) {
-          router.push(`${res.newUsername}`);
-        } else {
-          router.refresh();
+        if (
+          session.user.fullname !== fullname?.toString() ||
+          session.user.username !== username?.toString()
+        ) {
+          await updateSession({
+            username: username?.toString() || "",
+            fullname: fullname?.toString() || "",
+          });
+        }
+
+        if (username?.toString() !== user.username) {
+          router.push(`${username?.toString()}`);
         }
       }
 
       setIsDisabled(false);
       toast(res.message);
+      router.refresh();
     } catch (error) {
       console.log(error);
     }

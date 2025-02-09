@@ -17,7 +17,14 @@ const authOptions: AuthOptions = {
     }),
   ],
   callbacks: {
-    async jwt({ token, account, profile, user }: any) {
+    async jwt({ token, account, profile, user, trigger, session }: any) {
+      if (trigger === "update") {
+        console.log("session : ", session);
+        console.log("token : ", token);
+        const { name, ...rest } = token;
+        return { ...rest, ...session.user };
+      }
+
       if (account?.provider === "google") {
         const userData = { ...user };
         delete userData.id;
@@ -59,6 +66,8 @@ const authOptions: AuthOptions = {
           session.user.image = token.image;
         }
       }
+
+      delete session.user.name;
 
       return session;
     },
