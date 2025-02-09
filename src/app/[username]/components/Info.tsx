@@ -70,6 +70,7 @@ export default function Info({ user }: { user: User }) {
           oldUsername: user.username,
         }),
       }).then((res) => res.json());
+
       if (res.statusCode === 200) {
         if (
           session.user.fullname !== fullname?.toString() ||
@@ -82,13 +83,13 @@ export default function Info({ user }: { user: User }) {
         }
 
         if (username?.toString() !== user.username) {
-          router.push(`${username?.toString()}`);
+          return router.push(`${username?.toString()}`);
         }
       }
 
       setIsDisabled(false);
       toast(res.message);
-      router.refresh();
+      if (res.statusCode !== 400) return router.refresh();
     } catch (error) {
       console.log(error);
     }

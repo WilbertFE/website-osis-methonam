@@ -5,7 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function Hero({ user }: { user: User }) {
   return (
-    <div className="w-full flex mt-4 flex-col px-4 items-center">
+    <div className="w-full flex pt-24 flex-col px-4 items-center">
       <Avatar className="w-16 h-16">
         <AvatarImage
           alt={user?.fullname}

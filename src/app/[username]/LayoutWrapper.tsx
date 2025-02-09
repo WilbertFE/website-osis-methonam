@@ -5,9 +5,12 @@ import { Hero } from "./components";
 import { Info } from "./components";
 import { Admin, Settings } from "./components";
 import { useSession } from "next-auth/react";
+import Loading from "../loading";
 
 export default function LayoutWrapper({ user }: { user: User }) {
-  const { data: session }: any = useSession();
+  const { data: session, status }: any = useSession();
+
+  if (status === "loading") return <Loading />;
 
   return (
     <>

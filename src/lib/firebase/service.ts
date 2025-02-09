@@ -13,9 +13,17 @@ import { doc, collection, getDocs } from "firebase/firestore";
 import { User } from "@/types/User";
 import { v4 as uuidv4 } from "uuid";
 
+type Journal = {
+  title: string;
+  description: string;
+  credit: string;
+  content: string;
+  image: string;
+};
+
 const db = getFirestore(app);
 
-// login
+// user
 export async function loginWithGoogle(
   data: { name: string; email: string; image: string },
   callback: any
@@ -77,7 +85,6 @@ export async function loginWithGoogle(
   }
 }
 
-// user
 export async function getUserByUsername(username: string) {
   const q = query(collection(db, "users"), where("username", "==", username));
   const snapshot = await getDocs(q);
@@ -123,6 +130,13 @@ export async function updateUser(
   // if user not exists
   if (user.length === 0) return { statusCode: 404, message: "User not found!" };
 
+  // if has space
+  if (data.username.includes(" "))
+    return {
+      statusCode: 400,
+      message: "Username cannot include space characters",
+    };
+
   // if success
   const ref = doc(collection(db, "users"), user[0].id);
 
@@ -136,3 +150,12 @@ export async function updateUser(
       message: "Server error!",
     }));
 }
+
+// journal
+export async function createJournal({
+  title,
+  description,
+  credit,
+  content,
+  image,
+}: Journal) {}

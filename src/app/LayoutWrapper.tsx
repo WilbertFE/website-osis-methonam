@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import MainNavbar from "./navbar";
-import Loading from "./loading";
 import { SessionProvider } from "next-auth/react";
 import { NextUIProvider } from "@nextui-org/system";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
@@ -12,20 +11,21 @@ export default function LayoutWrapper({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [isContentLoaded, setIsContentLoaded] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   const [attribute, setAttribute] = useState("");
   const [themes, setThemes] = useState<string[] | undefined>(undefined);
 
   useEffect(() => {
-    setIsContentLoaded(true);
     setAttribute("class");
     setThemes(["light", "dark"]);
+    setIsMounted(true);
   }, []);
+
+  if (!isMounted) return null;
 
   return (
     <>
-      {!isContentLoaded && <Loading />}
-      {isContentLoaded && (
+      {isMounted && (
         <NextUIProvider>
           <NextThemesProvider
             attribute={attribute}
@@ -35,7 +35,7 @@ export default function LayoutWrapper({
           >
             <SessionProvider>
               <MainNavbar />
-              <main className="min-h-screen">
+              <main className="min-h-screen pb-32">
                 <div className="container">
                   <div className="flex flex-wrap gap-y-4 justify-center">
                     {children}
