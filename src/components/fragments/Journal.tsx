@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Card,
   CardContent,
@@ -20,8 +21,10 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "../ui/separator";
 import { Badge } from "../ui/badge";
+import { useSession } from "next-auth/react";
 
 export default function Journal() {
+  const { data: session }: any = useSession();
   return (
     <>
       <Card className="w-[320px]">
@@ -48,14 +51,25 @@ export default function Journal() {
         <Separator className="mb-3" />
         <CardFooter>
           <Sheet>
-            <div className="flex justify-between w-full">
-              <Button asChild>
-                <SheetTrigger>Detail</SheetTrigger>
-              </Button>
-              <Badge variant="outline">Cr: Tia & Nesya</Badge>
+            <div className="flex flex-col w-full">
+              <div className="flex justify-between">
+                <Button asChild>
+                  <SheetTrigger>Detail</SheetTrigger>
+                </Button>
+                <Badge variant="outline">Cr: Tia & Nesya</Badge>
+              </div>
+              {session?.user?.role === "admin" && (
+                <>
+                  <Separator className="w-full my-4" />
+                  <div className="flex justify-between">
+                    <Button variant="destructive">Delete</Button>
+                    <Button variant="secondary">Edit</Button>
+                  </div>
+                </>
+              )}
             </div>
-            <SheetContent className="w-full max-w-full flex flex-col">
-              <SheetHeader className="mt-12 flex-1">
+            <SheetContent className="w-full max-w-full flex flex-col z-[1000]">
+              <SheetHeader className="flex-1">
                 <SheetTitle>Valentine Days</SheetTitle>
                 <SheetDescription className="text-justify">
                   Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod

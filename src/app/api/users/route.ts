@@ -13,7 +13,6 @@ export async function PUT(req: Request) {
         {
           message: "All fields are required.",
           statusCode: 400,
-          newUsername: null,
         },
         { status: 400 }
       );
@@ -27,21 +26,14 @@ export async function PUT(req: Request) {
     };
 
     // Logika database dapat ditambahkan di sini
-    const { statusCode, message, newUsername } = await updateUser(
-      newUser,
-      oldUsername
-    );
-    return NextResponse.json(
-      { message, statusCode, newUsername },
-      { status: statusCode }
-    );
+    const { statusCode, message } = await updateUser(newUser, oldUsername);
+    return NextResponse.json({ message, statusCode }, { status: statusCode });
   } catch (error) {
     console.error("Error updating user:", error);
     return NextResponse.json(
       {
         message: "An error occurred while updating the user.",
         statusCode: 500,
-        newUsername: null,
       },
       { status: 500 }
     );

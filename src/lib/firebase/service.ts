@@ -12,14 +12,7 @@ import { app } from "./init";
 import { doc, collection, getDocs } from "firebase/firestore";
 import { User } from "@/types/User";
 import { v4 as uuidv4 } from "uuid";
-
-type Journal = {
-  title: string;
-  description: string;
-  credit: string;
-  content: string;
-  image: string;
-};
+import { Journal } from "@/types/Journal";
 
 const db = getFirestore(app);
 
@@ -154,8 +147,7 @@ export async function updateUser(
 // journal
 export async function createJournal({
   title,
-  description,
+  tagline,
   credit,
   content,
-  image,
 }: Journal) {}
