@@ -1,4 +1,9 @@
-// import { createJournal } from "@/lib/firebase/service";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import {
+  createJournal,
+  deleteJournal,
+  getJournals,
+} from "@/lib/firebase/service";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
@@ -16,19 +21,19 @@ export async function POST(req: Request) {
       );
     }
 
-    // const { statusCode, message } = await createJournal({
-    //   title,
-    //   tagline,
-    //   content,
-    //   credit,
-    // });
+    const { statusCode, message } = await createJournal({
+      title,
+      tagline,
+      content,
+      credit,
+    });
 
     return NextResponse.json(
       {
-        message: "success",
-        statusCode: 200,
+        message,
+        statusCode,
       },
-      { status: 200 }
+      { status: statusCode }
     );
   } catch (e) {
     console.log("error while creating journal : ", e);
@@ -37,6 +42,38 @@ export async function POST(req: Request) {
         message: "An error occurred while creating journal.",
         statusCode: 500,
       },
+      { status: 500 }
+    );
+  }
+}
+
+export async function GET(req: Request) {
+  try {
+    const { statusCode, message, journals } = await getJournals();
+    return NextResponse.json(
+      { statusCode, message, journals },
+      { status: statusCode }
+    );
+  } catch (error) {
+    console.log(error);
+    return NextResponse.json(
+      { statusCode: 500, message: "Server error", journals: null },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(req: Request) {
+  try {
+    const body = await req.json();
+    const { id } = body;
+
+    const { statusCode, message } = await deleteJournal(id);
+    return NextResponse.json({ statusCode, message }, { status: statusCode });
+  } catch (error) {
+    console.log(error);
+    return NextResponse.json(
+      { statusCode: 500, message: "Server error" },
       { status: 500 }
     );
   }

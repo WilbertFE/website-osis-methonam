@@ -3,6 +3,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-function-type */
 import {
   addDoc,
+  deleteDoc,
   getFirestore,
   query,
   updateDoc,
@@ -150,4 +151,41 @@ export async function createJournal({
   tagline,
   credit,
   content,
-}: Journal) {}
+}: Journal) {
+  try {
+    const docRef = await addDoc(collection(db, "journals"), {
+      title,
+      tagline,
+      credit,
+      content,
+    });
+    return { statusCode: 200, message: "Journal added" };
+  } catch (error) {
+    console.log(error);
+    return { statusCode: 500, message: "Server error" };
+  }
+}
+
+export async function getJournals() {
+  try {
+    const querySnapshot = await getDocs(collection(db, "journals"));
+    const journals = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    })) as Journal[];
+    return { statusCode: 200, message: "GET Journals", journals };
+  } catch (error) {
+    console.log(error);
+    return { statusCode: 500, message: "Server error", journals: null };
+  }
+}
+
+export async function deleteJournal(id: string) {
+  try {
+    await deleteDoc(doc(db, "journals", id));
+    return { statusCode: 200, message: "Journal deleted" };
+  } catch (error) {
+    console.log(error);
+    return { statusCode: 500, message: "Server error" };
+  }
+}

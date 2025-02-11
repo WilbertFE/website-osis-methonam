@@ -3,5 +3,5 @@ export type Journal = {
   tagline: string;
   content: string;
   credit: string;
-  image?: string;
+  id?: string;
 };
