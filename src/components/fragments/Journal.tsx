@@ -25,6 +25,19 @@ import { useSession } from "next-auth/react";
 import { Journal as JournalType } from "@/types/Journal";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { FormEvent, useState } from "react";
 
 type response = {
   statusCode: number;
@@ -34,6 +47,7 @@ type response = {
 export default function Journal({ data }: { data: JournalType }) {
   const { data: session }: any = useSession();
   const router = useRouter();
+  const [isDisabled, setIsDisabled] = useState(false);
 
   const handleDelete = async () => {
     try {
@@ -56,7 +70,47 @@ export default function Journal({ data }: { data: JournalType }) {
       toast("Failed to delete journal");
     }
   };
-  const handleUpdate = () => {};
+
+  const handleUpdate = async (e: FormEvent<HTMLFormElement>) => {
+    setIsDisabled(true);
+    e.preventDefault();
+
+    const formData = new FormData(e.currentTarget);
+    const title = formData.get("title");
+    const tagline = formData.get("tagline");
+    const credit = formData.get("credit");
+    const content = formData.get("content");
+
+    try {
+      const res: { statusCode: number; message: string } = await fetch(
+        "/api/journals",
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            id: data.id,
+            title,
+            tagline,
+            credit,
+            content,
+          }),
+        }
+      ).then((res) => res.json());
+      if (res.statusCode === 200) {
+        setIsDisabled(false);
+        toast(res.message);
+        router.refresh();
+      } else {
+        throw new Error("Failed! Something went wrong");
+      }
+    } catch (error) {
+      console.log(error);
+      setIsDisabled(false);
+      toast("Failed! Server error");
+    }
+  };
   return (
     <Card className="w-[320px]">
       <CardHeader>
@@ -92,9 +146,76 @@ export default function Journal({ data }: { data: JournalType }) {
                   <Button variant="destructive" onClick={handleDelete}>
                     Delete
                   </Button>
-                  <Button variant="secondary" onClick={handleUpdate}>
-                    Edit
-                  </Button>
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button variant="secondary">Edit</Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-[425px]">
+                      <DialogHeader>
+                        <DialogTitle>Edit journal</DialogTitle>
+                        <DialogDescription>
+                          Make changes to this journal here. Click save when you
+                          re done.
+                        </DialogDescription>
+                      </DialogHeader>
+                      <form onSubmit={(e) => handleUpdate(e)}>
+                        <div className="grid gap-4 py-4">
+                          <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="title" className="text-right">
+                              Title
+                            </Label>
+                            <Input
+                              id="title"
+                              name="title"
+                              className="col-span-3"
+                              placeholder="New title"
+                              defaultValue={data.title}
+                            />
+                          </div>
+                          <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="tagline" className="text-right">
+                              Tagline
+                            </Label>
+                            <Input
+                              id="tagline"
+                              name="tagline"
+                              className="col-span-3"
+                              placeholder="New tagline"
+                              defaultValue={data.tagline}
+                            />
+                          </div>
+                          <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="credit" className="text-right">
+                              Credit
+                            </Label>
+                            <Input
+                              id="credit"
+                              name="credit"
+                              className="col-span-3"
+                              placeholder="New credit"
+                              defaultValue={data.credit}
+                            />
+                          </div>
+
+                          <div className="grid w-full gap-1.5">
+                            <Label htmlFor="content">Content</Label>
+                            <Textarea
+                              placeholder="New content"
+                              id="content"
+                              name="content"
+                              className="min-h-[50px]"
+                              defaultValue={data.content}
+                            />
+                          </div>
+                        </div>
+                        <DialogFooter>
+                          <Button type="submit" disabled={isDisabled}>
+                            {isDisabled ? "Loading..." : "Save changes"}
+                          </Button>
+                        </DialogFooter>
+                      </form>
+                    </DialogContent>
+                  </Dialog>
                 </div>
               </>
             )}

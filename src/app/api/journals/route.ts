@@ -3,6 +3,7 @@ import {
   createJournal,
   deleteJournal,
   getJournals,
+  updateJournal,
 } from "@/lib/firebase/service";
 import { NextResponse } from "next/server";
 
@@ -69,6 +70,28 @@ export async function DELETE(req: Request) {
     const { id } = body;
 
     const { statusCode, message } = await deleteJournal(id);
+    return NextResponse.json({ statusCode, message }, { status: statusCode });
+  } catch (error) {
+    console.log(error);
+    return NextResponse.json(
+      { statusCode: 500, message: "Server error" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PUT(req: Request) {
+  try {
+    const body = await req.json();
+    const { id, title, content, tagline, credit } = body;
+
+    const { statusCode, message } = await updateJournal({
+      id,
+      title,
+      content,
+      tagline,
+      credit,
+    });
     return NextResponse.json({ statusCode, message }, { status: statusCode });
   } catch (error) {
     console.log(error);
