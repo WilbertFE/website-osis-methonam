@@ -213,7 +213,7 @@ export async function createAgenda({ title, content, date }: Agenda) {
     const docRef = await addDoc(collection(db, "agendas"), {
       title,
       content,
-      date,
+      // date,
       created_at: now,
       updated_at: now,
     });

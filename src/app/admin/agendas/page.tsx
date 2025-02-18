@@ -20,7 +20,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Calendar } from "@/components/ui/calendar";
+// import { Calendar } from "@/components/ui/calendar";
 import { Agenda as AgendaType } from "@/types/Agenda";
 
 type response = {
@@ -33,7 +33,9 @@ export default function AdminAgendas() {
   const [isDisabled, setIsDisabled] = useState(false);
   const router = useRouter();
   const [agendas, setAgendas] = useState<null | AgendaType[]>(null);
-  const [date, setDate] = useState<Date | undefined>(new Date());
+  // const [date, setDate] = useState<Date | undefined>(new Date());
+
+  console.log("try");
 
   const getAgendas = async () => {
     const res: {
@@ -63,7 +65,7 @@ export default function AdminAgendas() {
     const data = new FormData(e.currentTarget);
     const title = data.get("title");
     const content = data.get("content");
-    const dateData = date?.toISOString();
+    // const dateData = date?.toISOString();
 
     try {
       const res: response = await fetch("/api/agendas", {
@@ -74,7 +76,7 @@ export default function AdminAgendas() {
         body: JSON.stringify({
           title,
           content,
-          date: dateData,
+          // date: dateData,
         }),
       }).then((res) => res.json());
       if (res.statusCode === 200) {
@@ -133,7 +135,7 @@ export default function AdminAgendas() {
                       className="min-h-[200px]"
                     />
                   </div>
-                  <div className="flex flex-col items-center gap-4">
+                  {/* <div className="flex flex-col items-center gap-4">
                     <Label htmlFor="date" className="text-left">
                       Date
                     </Label>
@@ -143,7 +145,7 @@ export default function AdminAgendas() {
                       onSelect={setDate}
                       className="rounded-md border"
                     />
-                  </div>
+                  </div> */}
                 </div>
                 <SheetFooter>
                   <Button type="submit">

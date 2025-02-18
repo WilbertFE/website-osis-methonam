@@ -1,7 +1,7 @@
 export type Agenda = {
   id?: string;
   title: string;
-  date: string;
+  date?: string;
   image?: string;
   countdown?: string;
   content: string;

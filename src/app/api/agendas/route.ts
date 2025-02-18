@@ -14,7 +14,7 @@ export async function POST(req: Request) {
     const body = await req.json();
     const { title, content, date } = body;
 
-    if (!title || !date || !content) {
+    if (!title || !content) {
       return NextResponse.json(
         {
           message: "All fields are required.",
@@ -26,7 +26,7 @@ export async function POST(req: Request) {
 
     const { statusCode, message } = await createAgenda({
       title,
-      date,
+      // date,
       content,
     });
 
