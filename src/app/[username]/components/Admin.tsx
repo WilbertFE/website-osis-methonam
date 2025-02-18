@@ -17,11 +17,12 @@ export default function Admin() {
             <ArrowRight />
           </Link>
           <Separator />
-          <div className="flex gap-x-2 cursor-pointer">
+
+          <Link href="/admin/agendas" className="flex gap-x-2 cursor-pointer">
             <Calendar1 />
             <span className="flex-1 line-clamp-1">Agendas</span>
             <ArrowRight />
-          </div>
+          </Link>
         </div>
       </div>
     </>

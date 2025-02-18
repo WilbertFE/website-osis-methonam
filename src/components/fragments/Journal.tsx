@@ -98,6 +98,7 @@ export default function Journal({ data }: { data: JournalType }) {
           }),
         }
       ).then((res) => res.json());
+      console.log(res);
       if (res.statusCode === 200) {
         setIsDisabled(false);
         toast(res.message);
@@ -105,10 +106,10 @@ export default function Journal({ data }: { data: JournalType }) {
       } else {
         throw new Error("Failed! Something went wrong");
       }
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
       setIsDisabled(false);
-      toast("Failed! Server error");
+      toast(error.message);
     }
   };
   return (

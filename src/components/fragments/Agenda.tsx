@@ -21,14 +21,14 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { Badge } from "../ui/badge";
+import { Agenda as AgendaType } from "@/types/Agenda";
 
-export default function Agenda() {
+export default function Agenda({ data }: { data: AgendaType }) {
   return (
     <Card className="w-[320px]">
       <CardHeader>
-        <CardTitle>Sabtu</CardTitle>
-        <CardDescription>14 Febuari 2025</CardDescription>
-        <CardTitle>Valentine Days</CardTitle>
+        <CardTitle>{data.title}</CardTitle>
+        <CardDescription>{data.date}</CardDescription>
       </CardHeader>
       <CardContent>
         <AspectRatio ratio={16 / 9}>
@@ -49,16 +49,10 @@ export default function Agenda() {
           </div>
           <DrawerContent>
             <DrawerHeader>
-              <DrawerTitle>Valentine Days</DrawerTitle>
-              <DrawerDescription>Sabtu, 14 Febuari 2025</DrawerDescription>
+              <DrawerTitle>{data.title}</DrawerTitle>
+              <DrawerDescription>{data.date}</DrawerDescription>
               <DrawerDescription className="text-justify">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum
-                sint debitis cumque suscipit, libero asperiores ipsa consectetur
-                hic id! Cupiditate velit, doloremque deserunt earum laboriosam
-                voluptatibus libero facere accusantium sequi? Tempore totam
-                sequi, sint, eaque ipsum exercitationem sit veniam molestias at,
-                maxime commodi quis quibusdam porro voluptatem ullam? Accusamus,
-                amet.
+                {data.content}
               </DrawerDescription>
             </DrawerHeader>
             <DrawerFooter>

@@ -3,9 +3,9 @@
 "use client";
 
 import { Journal } from "@/components/fragments";
-import { Button } from "@/components/ui/button";
+// import { Button } from "@/components/ui/button";
 import { Journal as JournalType } from "@/types/Journal";
-import Link from "next/link";
+// import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function Journals() {
@@ -45,9 +45,9 @@ export default function Journals() {
                 <Journal data={data} />
               </div>
             ))}
-            <Link href="/journals">
+            {/* <Link href="/journals">
               <Button className="text-white font-bold">Lebih</Button>
-            </Link>
+            </Link> */}
           </div>
         </div>
       )}

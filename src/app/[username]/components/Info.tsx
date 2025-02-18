@@ -139,8 +139,8 @@ export default function Info({ user }: { user: User }) {
                       defaultValue={user.username}
                     />
                   </div>
-                  <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="bio" className="text-right">
+                  <div className="flex flex-col gap-4">
+                    <Label htmlFor="bio" className="text-left">
                       Bio
                     </Label>
                     <Textarea
