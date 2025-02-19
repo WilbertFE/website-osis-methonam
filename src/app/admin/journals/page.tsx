@@ -32,6 +32,8 @@ export default function AdminJournals() {
   const router = useRouter();
   const [journals, setJournals] = useState<null | JournalType[]>(null);
 
+  console.log("admin journals");
+
   const getJournals = async () => {
     const res: {
       statusCode: number;
