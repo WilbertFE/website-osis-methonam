@@ -60,8 +60,8 @@ export default function MainNavbar() {
             <DropdownMenuTrigger>
               <Avatar>
                 <AvatarImage
-                  src={session.user.image || "https://github.com/shadcn.png"}
-                  alt={session.user.fullname}
+                  src={session?.user?.image || "https://github.com/shadcn.png"}
+                  alt={session?.user?.fullname || "profile"}
                 />
                 <AvatarFallback>WFE</AvatarFallback>
               </Avatar>
@@ -73,7 +73,7 @@ export default function MainNavbar() {
                 <>
                   <DropdownMenuItem>
                     <Link
-                      href={`/${session.user.username || ""}`}
+                      href={`/${session?.user?.username || ""}`}
                       className="w-full h-full cursor-pointer"
                     >
                       Profile
