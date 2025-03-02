@@ -29,13 +29,10 @@ type response = {
 };
 
 export default function AdminAgendas() {
-  const { status } = useSession();
+  const { status, data: session }: any = useSession();
   const [isDisabled, setIsDisabled] = useState(false);
   const router = useRouter();
   const [agendas, setAgendas] = useState<null | AgendaType[]>(null);
-  // const [date, setDate] = useState<Date | undefined>(new Date());
-
-  console.log("try");
 
   const getAgendas = async () => {
     const res: {
@@ -65,7 +62,6 @@ export default function AdminAgendas() {
     const data = new FormData(e.currentTarget);
     const title = data.get("title");
     const content = data.get("content");
-    // const dateData = date?.toISOString();
 
     try {
       const res: response = await fetch("/api/agendas", {
@@ -76,7 +72,6 @@ export default function AdminAgendas() {
         body: JSON.stringify({
           title,
           content,
-          // date: dateData,
         }),
       }).then((res) => res.json());
       if (res.statusCode === 200) {
@@ -135,17 +130,6 @@ export default function AdminAgendas() {
                       className="min-h-[200px]"
                     />
                   </div>
-                  {/* <div className="flex flex-col items-center gap-4">
-                    <Label htmlFor="date" className="text-left">
-                      Date
-                    </Label>
-                    <Calendar
-                      mode="single"
-                      selected={date}
-                      onSelect={setDate}
-                      className="rounded-md border"
-                    />
-                  </div> */}
                 </div>
                 <SheetFooter>
                   <Button type="submit">
@@ -157,9 +141,9 @@ export default function AdminAgendas() {
           </Sheet>
         </div>
         {agendas && agendas.length > 0 && (
-          <div className="space-y-4">
+          <div className="space-y-4 w-full flex flex-col items-center">
             {agendas.map((data: AgendaType, i) => (
-              <Agenda data={data} key={i} />
+              <Agenda role={session?.user.role} data={data} key={i} />
             ))}
           </div>
         )}

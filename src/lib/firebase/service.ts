@@ -237,3 +237,15 @@ export async function getAgendas() {
     return { statusCode: 500, message: "Server error", agendas: null };
   }
 }
+
+export async function updateAgenda(data: any) {
+  try {
+    const now = new Date().toISOString();
+    const journalRef = doc(db, "agendas", data.id);
+    await updateDoc(journalRef, { ...data, updated_at: now });
+    return { statusCode: 200, message: "Success! Journal updated" };
+  } catch (error) {
+    console.log(error);
+    return { statusCode: 500, message: "Server error" };
+  }
+}

@@ -1,12 +1,15 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { Agenda } from "@/components/fragments";
 // import { Button } from "@/components/ui/button";
 import { Agenda as AgendaType } from "@/types/Agenda";
+import { useSession } from "next-auth/react";
 // import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function Agendas() {
   const [agendas, setAgendas] = useState<null | AgendaType[]>(null);
+  const { data: session }: any = useSession();
   const getAgendas = async () => {
     const res: {
       statusCode: number;
@@ -22,6 +25,8 @@ export default function Agendas() {
     return res;
   };
 
+  console.log("session2: ", session);
+
   useEffect(() => {
     getAgendas();
   }, []);
@@ -35,13 +40,10 @@ export default function Agendas() {
         {agendas && agendas.length > 0 && (
           <div className="space-y-4">
             {agendas.map((data: AgendaType, i) => (
-              <Agenda data={data} key={i} />
+              <Agenda role={session?.user.role} data={data} key={i} />
             ))}
           </div>
         )}
-        {/* <Link href="/journals">
-          <Button className="text-white font-bold">Lebih</Button>
-        </Link> */}
       </div>
     </div>
   );
