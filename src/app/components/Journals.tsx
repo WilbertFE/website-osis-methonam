@@ -3,33 +3,19 @@
 "use client";
 
 import { Journal } from "@/components/fragments";
-// import { Button } from "@/components/ui/button";
 import { Journal as JournalType } from "@/types/Journal";
-// import Link from "next/link";
-import { useEffect, useState } from "react";
+
+const journals: JournalType[] = [
+  {
+    title: "Hari Paskah 2025",
+    credit: "Wilbert Bernardi",
+    tagline: "Tes",
+    content:
+      "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nihil impedit, eaque sunt error expedita alias quod a. Magni doloremque sint illum tempora aspernatur, officia commodi quo fuga? Quia, eos atque!",
+  },
+];
 
 export default function Journals() {
-  const [journals, setJournals] = useState<null | JournalType[]>(null);
-
-  const getJournals = async () => {
-    const res: {
-      statusCode: number;
-      message: string;
-      journals: JournalType[] | null;
-    } = await fetch("/api/journals", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }).then((res) => res.json());
-    if (res.journals) setJournals(res.journals);
-    return res;
-  };
-
-  useEffect(() => {
-    getJournals();
-  }, []);
-
   return (
     <>
       {journals && journals.length > 0 && (
@@ -45,9 +31,6 @@ export default function Journals() {
                 <Journal data={data} />
               </div>
             ))}
-            {/* <Link href="/journals">
-              <Button className="text-white font-bold">Lebih</Button>
-            </Link> */}
           </div>
         </div>
       )}

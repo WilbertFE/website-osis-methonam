@@ -25,7 +25,7 @@ type response = {
   message: string;
 };
 
-export default function Info({ user }: { user: User }) {
+export default function Profile({ user }: { user: User }) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const router = useRouter();
   const [isDisabled, setIsDisabled] = useState(false);

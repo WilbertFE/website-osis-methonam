@@ -3,5 +3,4 @@ export type Journal = {
   tagline: string;
   content: string;
   credit: string;
-  id?: string;
 };

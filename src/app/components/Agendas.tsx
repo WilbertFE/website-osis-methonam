@@ -1,35 +1,20 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { Agenda } from "@/components/fragments";
-// import { Button } from "@/components/ui/button";
 import { Agenda as AgendaType } from "@/types/Agenda";
-import { useSession } from "next-auth/react";
-// import Link from "next/link";
-import { useEffect, useState } from "react";
+
+const agendas: AgendaType[] = [
+  {
+    title: "Classmeet Mobile Legends",
+    countdown: "countdown",
+    date: "5 Mei 2025",
+    image: "/img/integritas.jpeg",
+    content:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam sint eligendi aliquam. Quasi iure unde animi molestiae, atque sapiente perferendis sunt incidunt, inventore excepturi commodi dolores tempore explicabo quisquam repudiandae!",
+  },
+];
 
 export default function Agendas() {
-  const [agendas, setAgendas] = useState<null | AgendaType[]>(null);
-  const { data: session }: any = useSession();
-  const getAgendas = async () => {
-    const res: {
-      statusCode: number;
-      message: string;
-      agendas: AgendaType[] | null;
-    } = await fetch("/api/agendas", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }).then((res) => res.json());
-    if (res.agendas && res.agendas.length > 0) setAgendas(res.agendas);
-    return res;
-  };
-
-  console.log("session2: ", session);
-
-  useEffect(() => {
-    getAgendas();
-  }, []);
   return (
     <div className="flex flex-col w-full pt-36 pb-32">
       <h1 className="text-center font-bold text-3xl tracking-wide">
@@ -40,7 +25,7 @@ export default function Agendas() {
         {agendas && agendas.length > 0 && (
           <div className="space-y-4">
             {agendas.map((data: AgendaType, i) => (
-              <Agenda role={session?.user.role} data={data} key={i} />
+              <Agenda data={data} key={i} />
             ))}
           </div>
         )}

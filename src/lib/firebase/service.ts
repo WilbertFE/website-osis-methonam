@@ -13,8 +13,6 @@ import { app } from "./init";
 import { doc, collection, getDocs } from "firebase/firestore";
 import { User } from "@/types/User";
 import { v4 as uuidv4 } from "uuid";
-import { Journal } from "@/types/Journal";
-import { Agenda } from "@/types/Agenda";
 
 const db = getFirestore(app);
 
@@ -122,9 +120,6 @@ export async function updateUser(
 
   if (!user) return { statusCode: 404, message: "User not found!" };
 
-  // if user not exists
-  if (user.length === 0) return { statusCode: 404, message: "User not found!" };
-
   // if has space
   if (data.username.includes(" "))
     return {
@@ -144,108 +139,4 @@ export async function updateUser(
       statusCode: 500,
       message: "Server error!",
     }));
-}
-
-// journal
-export async function createJournal({
-  title,
-  tagline,
-  credit,
-  content,
-}: Journal) {
-  try {
-    const now = new Date().toISOString();
-    const docRef = await addDoc(collection(db, "journals"), {
-      title,
-      tagline,
-      credit,
-      content,
-      created_at: now,
-      updated_at: now,
-    });
-    return { statusCode: 200, message: "Journal added" };
-  } catch (error) {
-    console.log(error);
-    return { statusCode: 500, message: "Server error" };
-  }
-}
-
-export async function getJournals() {
-  try {
-    const querySnapshot = await getDocs(collection(db, "journals"));
-    const journals = querySnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    })) as Journal[];
-    return { statusCode: 200, message: "GET Journals", journals };
-  } catch (error) {
-    console.log(error);
-    return { statusCode: 500, message: "Server error", journals: null };
-  }
-}
-
-export async function deleteJournal(id: string) {
-  try {
-    await deleteDoc(doc(db, "journals", id));
-    return { statusCode: 200, message: "Journal deleted" };
-  } catch (error) {
-    console.log(error);
-    return { statusCode: 500, message: "Server error" };
-  }
-}
-
-export async function updateJournal(data: any) {
-  try {
-    const now = new Date().toISOString();
-    const journalRef = doc(db, "journals", data.id);
-    await updateDoc(journalRef, { ...data, updated_at: now });
-    return { statusCode: 200, message: "Success! Journal updated" };
-  } catch (error) {
-    console.log(error);
-    return { statusCode: 500, message: "Server error" };
-  }
-}
-
-// agendas
-export async function createAgenda({ title, content, date }: Agenda) {
-  try {
-    const now = new Date().toISOString();
-    const docRef = await addDoc(collection(db, "agendas"), {
-      title,
-      content,
-      // date,
-      created_at: now,
-      updated_at: now,
-    });
-    return { statusCode: 200, message: "Agenda added" };
-  } catch (error) {
-    console.log(error);
-    return { statusCode: 500, message: "Server error" };
-  }
-}
-
-export async function getAgendas() {
-  try {
-    const querySnapshot = await getDocs(collection(db, "agendas"));
-    const agendas = querySnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    })) as Agenda[];
-    return { statusCode: 200, message: "GET Journals", agendas };
-  } catch (error) {
-    console.log(error);
-    return { statusCode: 500, message: "Server error", agendas: null };
-  }
-}
-
-export async function updateAgenda(data: any) {
-  try {
-    const now = new Date().toISOString();
-    const journalRef = doc(db, "agendas", data.id);
-    await updateDoc(journalRef, { ...data, updated_at: now });
-    return { statusCode: 200, message: "Success! Journal updated" };
-  } catch (error) {
-    console.log(error);
-    return { statusCode: 500, message: "Server error" };
-  }
 }

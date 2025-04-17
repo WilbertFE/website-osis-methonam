@@ -9,7 +9,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Image from "next/image";
-import FotoOsis from "@/../public/img/fotbar.jpeg";
 import { Button } from "../ui/button";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import {
@@ -24,29 +23,8 @@ import {
 } from "@/components/ui/drawer";
 import { Badge } from "../ui/badge";
 import { Agenda as AgendaType } from "@/types/Agenda";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Calendar } from "@/components/ui/calendar";
-import { useState } from "react";
 
-export default function Agenda({
-  data,
-  role,
-}: {
-  data: AgendaType;
-  role: any;
-}) {
-  const [date, setDate] = useState<Date | undefined>(new Date());
+export default function Agenda({ data }: { data: AgendaType }) {
   return (
     <Card className="w-[320px]">
       <CardHeader>
@@ -56,9 +34,10 @@ export default function Agenda({
       <CardContent>
         <AspectRatio ratio={16 / 9}>
           <Image
-            src={FotoOsis}
+            src={data.image}
             alt="Valentine Days"
-            className="rounded-md object-cover"
+            className="rounded-md object-cover object-center"
+            fill
           />
         </AspectRatio>
       </CardContent>
@@ -86,59 +65,6 @@ export default function Agenda({
               </DrawerFooter>
             </DrawerContent>
           </Drawer>
-          {role === "admin" ? (
-            <>
-              <div className="my-4"></div>
-              <div className="flex justify-between">
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button variant="outline">Edit</Button>
-                  </DialogTrigger>
-                  <DialogContent className="sm:max-w-[425px]">
-                    <DialogHeader>
-                      <DialogTitle>Edit profile</DialogTitle>
-                      <DialogDescription>
-                        Make changes to your profile here. Click save when youre
-                        done.
-                      </DialogDescription>
-                    </DialogHeader>
-                    <div className="grid gap-4 py-4">
-                      <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="title" className="text-right">
-                          Title
-                        </Label>
-                        <Input id="title" className="col-span-3" />
-                      </div>
-                      <div className="flex flex-col gap-4">
-                        <Label htmlFor="date" className="text-left">
-                          Date
-                        </Label>
-                        <Calendar
-                          mode="single"
-                          selected={date}
-                          onSelect={setDate}
-                          className="rounded-md border w-[250px]"
-                        />
-                      </div>
-                      <div className="flex flex-col gap-4">
-                        <Label htmlFor="content" className="text-left">
-                          Content
-                        </Label>
-                        <Textarea
-                          id="content"
-                          placeholder="Type your message here."
-                        />
-                      </div>
-                    </div>
-                    <DialogFooter>
-                      <Button type="submit">Submit</Button>
-                    </DialogFooter>
-                  </DialogContent>
-                </Dialog>
-                <Button variant="destructive">Delete</Button>
-              </div>
-            </>
-          ) : null}
         </div>
       </CardFooter>
     </Card>

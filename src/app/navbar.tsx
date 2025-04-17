@@ -36,10 +36,6 @@ export default function MainNavbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { status, data: session }: any = useSession();
 
-  console.log("sesssion: ", session);
-
-  console.log(status);
-
   if (status === "loading") return null;
 
   return (
