@@ -31,19 +31,12 @@ export default function Profile({ user }: { user: User }) {
   const [isDisabled, setIsDisabled] = useState(false);
   const { data: session, update }: any = useSession();
 
-  const updateSession = async ({
-    username,
-    fullname,
-  }: {
-    username: string;
-    fullname: string;
-  }) => {
+  const updateSession = async ({ username }: { username: string }) => {
     await update({
       ...session,
       user: {
         ...session?.user,
         username,
-        fullname,
       },
     });
   };
@@ -54,7 +47,7 @@ export default function Profile({ user }: { user: User }) {
 
     const data = new FormData(e.currentTarget);
     const username = data.get("username");
-    const fullname = data.get("fullname");
+
     const bio = data.get("bio");
 
     try {
@@ -64,7 +57,6 @@ export default function Profile({ user }: { user: User }) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          fullname,
           username,
           bio,
           oldUsername: user.username,
@@ -72,13 +64,9 @@ export default function Profile({ user }: { user: User }) {
       }).then((res) => res.json());
 
       if (res.statusCode === 200) {
-        if (
-          session.user.fullname !== fullname?.toString() ||
-          session.user.username !== username?.toString()
-        ) {
+        if (session.user.username !== username?.toString()) {
           await updateSession({
             username: username?.toString() || "",
-            fullname: fullname?.toString() || "",
           });
         }
 
@@ -117,17 +105,6 @@ export default function Profile({ user }: { user: User }) {
               </DialogHeader>
               <form onSubmit={(e) => handleSubmit(e)}>
                 <div className="grid gap-4 py-4">
-                  <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="fullname" className="text-right">
-                      Name
-                    </Label>
-                    <Input
-                      id="fullname"
-                      name="fullname"
-                      className="col-span-3"
-                      defaultValue={user.fullname}
-                    />
-                  </div>
                   <div className="grid grid-cols-4 items-center gap-4">
                     <Label htmlFor="username" className="text-right">
                       Username

@@ -5,10 +5,10 @@ export async function PUT(req: Request) {
   try {
     // Parse JSON body from the request
     const body = await req.json();
-    const { fullname, username, bio, oldUsername } = body;
+    const { username, bio, oldUsername } = body;
 
     // Validasi input
-    if (!fullname || !username || !bio || !oldUsername) {
+    if (!username || !bio || !oldUsername) {
       return NextResponse.json(
         {
           message: "All fields are required.",
@@ -20,7 +20,6 @@ export async function PUT(req: Request) {
 
     // Contoh: Simulasi menyimpan data ke database
     const newUser = {
-      fullname,
       username,
       bio,
     };

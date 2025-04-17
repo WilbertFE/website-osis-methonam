@@ -34,7 +34,6 @@ export async function loginWithGoogle(
     const newUser: User = {
       email: data.email,
       fullname: data.name,
-      type: "google",
       username: `user-${uuidv4()}`,
       bio: "Describe yourself.",
       image: data.image,
@@ -110,7 +109,6 @@ export async function getUserByEmail(email: string) {
 
 export async function updateUser(
   data: {
-    fullname: string;
     username: string;
     bio: string;
   },
